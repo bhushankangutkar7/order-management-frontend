@@ -44,10 +44,6 @@ const Orders = () => {
 
   // Update orders when socket receives new data
   useEffect(() => {
-    console.log("orderStatusSocket", orderStatusSocket);
-    console.log("isConnectedSocket", isConnectedSocket);
-    console.log("latestUpdateSocket", latestUpdateSocket);
-    console.log("activeOrder", activeOrder);
     if (latestUpdateSocket) {
       setOrdersStatus((prev) =>
         prev.map((order) =>
@@ -59,7 +55,6 @@ const Orders = () => {
 
       // Update active order if it's the same
       if (activeOrder?._id === latestUpdateSocket.orderId) {
-        console.log("Updating active order with latest socket data");
         setActiveOrder({ ...activeOrder, ...latestUpdateSocket});
         // setActiveOrder({ ...activeOrder, "status": latestUpdateSocket.status });
       }

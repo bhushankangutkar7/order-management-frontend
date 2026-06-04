@@ -1,15 +1,15 @@
 // app/[slug]/page.jsx
 'use client';
 import { usePathname } from 'next/navigation';
-import Home from '../../pages/public/Home.jsx';
-import About from '../../pages/public/About.jsx';
-import Contact from '../../pages/public/Contact.jsx';
-import Login from '../../pages/public/Login.jsx';
-import Signup from '../../pages/public/Signup.jsx';
-import Menu from '../../pages/protected/Menu.jsx';
-import Order from '../../pages/protected/Order.jsx';
-import Cart from '../../pages/protected/Cart.jsx';
-import Profile from '../../pages/protected/Profile.jsx';
+import Home from '../../pages-component/public/Home.jsx';
+import About from '../../pages-component/public/About.jsx';
+import Contact from '../../pages-component/public/Contact.jsx';
+import Login from '../../pages-component/public/Login.jsx';
+import Signup from '../../pages-component/public/Signup.jsx';
+import Menu from '../../pages-component/protected/Menu.jsx';
+import Order from '../../pages-component/protected/Order.jsx';
+import Cart from '../../pages-component/protected/Cart.jsx';
+import Profile from '../../pages-component/protected/Profile.jsx';
 
 
 export default function DynamicPublicPages() {
