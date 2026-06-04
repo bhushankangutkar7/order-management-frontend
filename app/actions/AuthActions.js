@@ -1,85 +1,122 @@
-import 'server-only';
-import { connectDB } from "../../db/config/ConnectDB.js";
-import User from "../../db/models/UserModel.js";
-import { generateToken, verifyToken } from "@/utils/server/JwtHelper";
+// app/actions/AuthActions.js
+'use server';
+import { cookies } from 'next/headers';
+import axios from 'axios';
 
-export async function login(email, password) {
+export async function login({
+  email,
+  password
+}) {
   try {
-    if (!email || !password) {
-      return res.json({
-        status: 400,
+    const cookieStore = await cookies();
+
+    const res = await axios.post("http://localhost:4000/api/v1/auth/login", {
+      email,
+      password
+    })
+    
+    if(!res.data.success) {
+      return {
         success: false,
-        message: 'Email and password are required',
-      })
+        message: res.message,
+      };
     }
     
-    await connectDB();
-  
-    const user = await User.findOne({ email });
-  
-    const isPasswordValid = verifyToken(password);
-  
-    if (!user || !isPasswordValid) {
-      return res.json({
-        status: 401,
-        success: false,
-        message: 'Invalid email or password',
-      })
-    }
+    const token =res.data.token;
 
-    // Generate token and return user data
-    const token = generateToken(user);
-    return {
-      status: 200,
-      success: true,
-      message: 'Login successful',
-      token
-    };
-
-  } catch (error) {
-    console.error('Login error:', error);
-    return {
-      status: 500,
-      success: false,
-      message: 'Internal server error',
-    }
-  }
-};
-
-export async function register(name, email, password) {
-  try {
-    if (!name || !email || !password) {
-      return res.json({
-        status: 400,
-        success: false,
-        message: 'Name, email and password are required',
-      })
-    }
-    
-    await connectDB();
-  
-    const user = await User.create({ name, email, password });
-  
-    const token = generateToken(user);
-    return {
-      status: 201,
-      success: true,
-      message: 'User created successfully',
+    cookieStore.set(
+      'session_token',
       token,
-      user: {
-        id: user._id,
-        email: user.email,
-        name: user.name,
+      {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        path: '/',
+        maxAge: 60 * 60,
       }
+    );
+
+    return {
+      success: true
     };
 
   } catch (error) {
-    console.error('Register error:', error);
+    console.error(error);
+
     return {
-      status: 500,
       success: false,
       message: 'Internal server error',
-    }
+    };
   }
-};
+}
 
+export async function register(data) {
+  const {  
+    firstName,
+    lastName,
+    email,
+    password,
+    confirmPassword
+  } = data;
+  
+  try {
+    const cookieStore = await cookies();
+
+    if(password !== confirmPassword) {
+      return {
+        success: false,
+        message: 'Passwords do not match',
+      };
+    }
+
+    const res = await axios.post(
+      "http://localhost:4000/api/v1/auth/login", 
+      data
+    )
+
+    if(!res.success){
+      return {
+        success: false,
+        message: res.messsage,
+      };
+    }
+
+    cookieStore.set(
+      'session_token',
+      token,
+      {
+        httpOnly: true,
+        secure:
+          process.env.NODE_ENV ===
+          'production',
+        sameSite: 'lax',
+        path: '/',
+        maxAge: 60 * 60,
+      }
+    );
+
+    return {
+      success: true
+    };
+
+  } catch (error) {
+    console.error(error);
+
+    return {
+      success: false,
+      message: 'Internal server error',
+    };
+  }
+}
+
+export async function logout() {
+  try {
+    const cookieStore = await cookies();
+    cookieStore.delete('session_token');
+    return {
+      success: true
+    };
+  } catch (error) {
+    return error;
+  }
+}

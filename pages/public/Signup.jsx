@@ -1,5 +1,9 @@
+// page/public/Signup.jsx
 import React, { useState } from 'react';
 import * as yup from 'yup';
+import { register } from '../../app/actions/AuthActions.js';
+import { useRouter } from 'next/navigation';
+
 
 const signupSchema = yup.object({
   firstName: yup
@@ -16,11 +20,11 @@ const signupSchema = yup.object({
     .string()
     .trim()
     .email('Invalid email')
+    .required('Email is required')
     .matches(
       /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
       'Email must include a valid domain extension (e.g. .com, .in)'
-    )
-    .required('Email is required'),
+    ),
   password: yup
     .string()
     .trim()
@@ -40,6 +44,7 @@ const signupSchema = yup.object({
 
 const Signup = () => {
   const [errors, setErrors] = useState({});
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,16 +59,11 @@ const Signup = () => {
       email: formData.get('email'),
       password: formData.get('password'),
       confirmPassword: formData.get('confirmPassword'),
-      // remember: formData.get('remember') === 'on',
     };
 
     try {
       await signupSchema.validate(data, { abortEarly: false });
-
-      if (Object.keys(errors).length === 0) {
-        alert('Singup Data Validated!');
-      }
-
+      
     } catch (err) {
       if (err instanceof yup.ValidationError) {
         const validationErrors = {};
@@ -74,9 +74,18 @@ const Signup = () => {
         return;
       }
     }
+    
+    const result = await register({
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      password: data.password,
+      confirmPassword: data.confirmPassword,
+    });
 
-    if (Object.keys(errors).length === 0) {
-      alert('Signup Form submitted successfully!');
+    if (result.success) {
+      router.refresh();
+      router.push("/menu");
     }
     
   };

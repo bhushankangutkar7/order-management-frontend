@@ -1,17 +1,16 @@
 "use server";
-
-import { connectDB } from "@/lib/mongodb";
-import Menu from "@/models/Menu";
+import axios from "axios";
+import { cookies } from "next/headers";
 
 export async function getAllMenuItems() {
-  await connectDB();
-  const menuItems = await Menu.find();
-  return JSON.parse(JSON.stringify(menuItems));
-}
-
-export async function createMenuItem(data) {
-  await connectDB();
-
-  const item = await Menu.create(data);
-  return JSON.parse(JSON.stringify(item));
-}
+  const cookieStore = await cookies();
+  const token = cookieStore.get("session_token")?.value;
+  
+  const response = await axios.get("http://localhost:4000/api/v1/menu", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  
+  return response.data.data;
+};

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import * as yup from 'yup';
+import { login } from '../../app/actions/AuthActions.js';
+import { useRouter } from 'next/navigation';
 
 // 1. Define the validation schema
 const loginSchema = yup.object({
@@ -7,11 +9,11 @@ const loginSchema = yup.object({
     .string()
     .trim()
     .email('Invalid email')
+    .required('Email is required')
     .matches(
       /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
       'Email must include a valid domain extension (e.g. .com, .in)'
-    )
-    .required('Email is required'),
+    ),
   password: yup
     .string()
     .trim()
@@ -26,6 +28,8 @@ const loginSchema = yup.object({
 
 const Login = () => {
   const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,10 +46,6 @@ const Login = () => {
 
     try {
       await loginSchema.validate(data, { abortEarly: false });
-
-      if (Object.keys(errors).length === 0) {
-        alert('Login Data Validated!');
-      };
     
     } catch (err) {
       if (err instanceof yup.ValidationError) {
@@ -58,9 +58,19 @@ const Login = () => {
       }
     }
 
-    if (Object.keys(errors).length === 0) {
-      alert('Login Form Submitted Successfully!');
-    };
+    const result = await login({
+      email: data.email,
+      password: data.password,
+    });
+
+    if (result.success) {
+      router.refresh();
+      router.push("/menu");
+      alert('Login Successful!');
+      return;
+    }
+
+    alert('Login failed. Please check your credentials.');
     
   };
 
@@ -73,6 +83,33 @@ const Login = () => {
       if (err instanceof yup.ValidationError) {
         setErrors(prev => ({...prev, [name]: err.message}));
         return;
+      }
+    }
+  };
+
+  const handleBlur = async (e) => {
+    const { name, value } = e.target;
+  
+    setTouched((prev) => ({
+      ...prev,
+      [name]: true,
+    }));
+  
+    try {
+      await loginSchema.validateAt(name, {
+        [name]: value,
+      });
+  
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
+    } catch (err) {
+      if (err instanceof yup.ValidationError) {
+        setErrors((prev) => ({
+          ...prev,
+          [name]: err.message,
+        }));
       }
     }
   };
@@ -95,9 +132,10 @@ const Login = () => {
                 errors.email ? 'border-red-500' : 'border-gray-300'
               }`}
               onChange={handleChange}
+              onBlur={handleBlur}
             />
             {/* 5. Display error message inline */}
-            {errors.email && (
+            {touched.email && errors.email && (
               <p className="text-red-500 text-sm mt-1">{errors.email}</p>
             )}
           </div>
@@ -113,9 +151,10 @@ const Login = () => {
                 errors.password ? 'border-red-500' : 'border-gray-300'
               }`}
               onChange={handleChange}
+              onBlur={handleBlur}
             />
             {/* Display error message inline */}
-            {errors.password && (
+            {touched.password && errors.password && (
               <p className="text-red-500 text-sm mt-1">{errors.password}</p>
             )}
           </div>
