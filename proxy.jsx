@@ -1,6 +1,5 @@
 // src/proxy.js
 import { NextResponse } from 'next/server';
-import { verifyJwtToken } from './utils/server/JwtHelper';
 import axios from 'axios';
 
 const protectedRoutes = [

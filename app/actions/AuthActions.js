@@ -41,7 +41,6 @@ export async function login({
     };
 
   } catch (error) {
-    console.error(error);
 
     return {
       success: false,
@@ -81,6 +80,11 @@ export async function register(data) {
       };
     }
 
+    console.log('Res.data:', res.data);
+    console.log('Token received:', res.data.token);
+
+    const token = res.data.token;
+
     cookieStore.set(
       'session_token',
       token,
@@ -100,8 +104,6 @@ export async function register(data) {
     };
 
   } catch (error) {
-    console.error(error);
-
     return {
       success: false,
       message: 'Internal server error',

@@ -21,8 +21,6 @@ export const simulateOrder = async (orderId) => {
 
   const io = getIO();
 
-  console.log("🚀 Simulating order:", orderId);
-
   for (let i = 1; i < statuses.length; i++) {
     await sleep(10000);
 
@@ -31,8 +29,6 @@ export const simulateOrder = async (orderId) => {
       { status: statuses[i] },
       { new: true }
     );
-
-    console.log("📦 STATUS:", updatedOrder.status);
 
     io?.emit("orderUpdated", updatedOrder);
   }

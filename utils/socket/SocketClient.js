@@ -21,7 +21,7 @@ export const getSocket = () => {
     });
 
     socket.on("connect_error", (err) => {
-      console.error("❌ Socket connection error:", err.message);
+      console.error("Socket connection error:", err.message);
     });
 
     socket.on("disconnect", () => {
@@ -42,7 +42,6 @@ export const getSocket = () => {
  */
 export const joinOrderRoom = (orderId) => {
   const socket = getSocket();
-  console.log(`📍 Joining order room: ${orderId}`);
   socket.emit("join-order", orderId);
 };
 
@@ -52,7 +51,6 @@ export const joinOrderRoom = (orderId) => {
  */
 export const leaveOrderRoom = (orderId) => {
   const socket = getSocket();
-  console.log(`🚪 Leaving order room: ${orderId}`);
   socket.emit("leave-order", orderId);
 };
 

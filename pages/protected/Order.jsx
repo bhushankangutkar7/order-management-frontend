@@ -208,21 +208,4 @@ const Orders = () => {
   );
 };
 
-// export default Orders;
-//             {pastOrders.map((order) => (
-//               <div key={order._id} className="border-b pb-4">
-//                 <h3 className="font-bold">Order #{order._id.slice(-6)}</h3>
-//                 <p className="text-gray-500">Status: {order.status}</p>
-//                 <p className="text-gray-500">
-//                   Created: {new Date(order.createdAt).toLocaleString()}
-//                 </p>
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
 export default Orders;

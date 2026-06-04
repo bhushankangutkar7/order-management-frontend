@@ -1,7 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import getCookie from '../utils/client/GetCookie';
 import Link from "next/link";
 import { logout } from '../app/actions/AuthActions.js';
 
