@@ -10,7 +10,7 @@ export async function login({
   try {
     const cookieStore = await cookies();
 
-    const res = await axios.post("http://localhost:4000/api/v1/auth/login", {
+    const res = await axios.post(`${process.env.BACKEND_NODE_URL}/api/v1/auth/login`, {
       email,
       password
     })
@@ -70,9 +70,9 @@ export async function register(data) {
     }
 
     const res = await axios.post(
-      "http://localhost:4000/api/v1/auth/login", 
+      `${process.env.BACKEND_NODE_URL}/api/v1/auth/register`,
       data
-    )
+    );
 
     if(!res.success){
       return {

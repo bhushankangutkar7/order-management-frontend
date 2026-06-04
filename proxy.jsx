@@ -1,6 +1,7 @@
 // src/proxy.js
 import { NextResponse } from 'next/server';
 import { verifyJwtToken } from './utils/server/JwtHelper';
+import axios from 'axios';
 
 const protectedRoutes = [
   '/menu',
@@ -24,8 +25,16 @@ export default async function proxy(request) {
 
   if (token) {
     try {
-      user = await verifyJwtToken(token);
-    } catch {
+      user = await axios.get(
+        `${process.env.BACKEND_NODE_URL}/api/v1/auth/verify-token`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );  
+    } catch (err) {
+      console.log("JWT error:", err.message);
       user = null;
     }
   }

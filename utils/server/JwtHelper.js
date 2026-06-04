@@ -20,5 +20,9 @@ export async function verifyJwtToken(token) {
   const { payload } =
     await jwtVerify(token, secret);
 
+    console.log("payload", payload);
+
+    
+
   return payload;
 }

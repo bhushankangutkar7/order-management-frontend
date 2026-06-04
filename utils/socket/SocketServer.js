@@ -7,16 +7,34 @@ export const initializeSocket = (server) => {
 
   io = new Server(server, {
     cors: {
-      origin: "*",
+      origin: process.env.BACKEND_NODE_URL || "http://localhost:4000",
       methods: ["GET", "POST"],
+      credentials: true,
     },
   });
 
   io.on("connection", (socket) => {
     console.log("✅ Socket Connected:", socket.id);
 
+    // Join specific order room for real-time updates
+    socket.on("join-order", (orderId) => {
+      console.log(`📍 Client ${socket.id} joining room: order_${orderId}`);
+      socket.join(`order_${orderId}`);
+      socket.emit("message", `Joined order room: ${orderId}`);
+    });
+
+    // Leave order room
+    socket.on("leave-order", (orderId) => {
+      console.log(`🚪 Client ${socket.id} leaving room: order_${orderId}`);
+      socket.leave(`order_${orderId}`);
+    });
+
     socket.on("disconnect", () => {
       console.log("❌ Socket Disconnected:", socket.id);
+    });
+
+    socket.on("error", (error) => {
+      console.error("Socket error:", error);
     });
   });
 

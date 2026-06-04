@@ -25,7 +25,7 @@ export async function createOrder(data) {
     );
 
     const response = await axios.post(
-      "http://localhost:4000/api/v1/orders",
+      `${process.env.BACKEND_NODE_URL}/api/v1/orders`,
       {
         items: updatedData,
         totalAmount,
@@ -64,7 +64,7 @@ export async function getAllOrders() {
       cookieStore.get("session_token")?.value;
       
     const response = await axios.get(
-      "http://localhost:4000/api/v1/orders",
+      `${process.env.BACKEND_NODE_URL}/api/v1/orders`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
