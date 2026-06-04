@@ -1,6 +1,6 @@
 // app/[slug]/page.jsx
 'use client';
-import { usePathname } from 'next/navigation';
+import { use }  from 'react';
 import Home from '../../pages-component/public/Home.jsx';
 import About from '../../pages-component/public/About.jsx';
 import Contact from '../../pages-component/public/Contact.jsx';
@@ -12,25 +12,25 @@ import Cart from '../../pages-component/protected/Cart.jsx';
 import Profile from '../../pages-component/protected/Profile.jsx';
 
 
-export default function DynamicPublicPages() {
-  const pathname = usePathname();
+export default function DynamicPublicPages({ params }) {
+   const { slug } = use(params);
 
-  switch(pathname) {
-    case '/about':
+  switch(slug) {
+    case 'about':
       return <About />;
-    case '/contact':
+    case 'contact':
       return <Contact />;
-    case '/login':
+    case 'login':
       return <Login />;
-    case '/signup':
+    case 'signup':
       return <Signup />;
-    case '/menu':
+    case 'menu':
       return <Menu/>;
-    case '/orders':
+    case 'orders':
       return <Order />;
-    case '/cart':
+    case 'cart':
       return <Cart />;
-    case '/profile':
+    case 'profile':
       return <Profile />;
     default:
       return <Home />;
