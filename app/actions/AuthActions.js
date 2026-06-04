@@ -32,7 +32,7 @@ export async function login({
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
         path: '/',
-        maxAge: 60 * 60,
+        maxAge: 60 * 60 * 2,
       }
     );
 
@@ -67,24 +67,21 @@ export async function register(data) {
         message: 'Passwords do not match',
       };
     }
-
+    
     const res = await axios.post(
       `${process.env.BACKEND_NODE_URL}/api/v1/auth/register`,
       data
     );
-
-    if(!res.success){
+    
+    if(!res.data.success){
       return {
         success: false,
-        message: res.messsage,
+        message: res.data.message,
       };
     }
-
-    console.log('Res.data:', res.data);
-    console.log('Token received:', res.data.token);
-
+    
     const token = res.data.token;
-
+    
     cookieStore.set(
       'session_token',
       token,
@@ -95,7 +92,7 @@ export async function register(data) {
           'production',
         sameSite: 'lax',
         path: '/',
-        maxAge: 60 * 60,
+        maxAge: 60 * 60 * 2,
       }
     );
 
