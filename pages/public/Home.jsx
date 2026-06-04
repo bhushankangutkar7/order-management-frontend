@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <div className="px-4 py-10">
@@ -14,9 +16,9 @@ export default function Home() {
           straight to your doorstep.
         </p>
 
-        <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg text-lg">
+        <Link href="/menu" className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg text-lg">
           Order Now
-        </button>
+        </Link>
       </div>
 
       {/* Features Section */}
@@ -93,9 +95,9 @@ export default function Home() {
           Discover amazing restaurants and order your favorite food now.
         </p>
 
-        <button className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg text-lg">
+        <Link href="/menu" className="inline-block bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg text-lg">
           Start Ordering
-        </button>
+        </Link>
       </div>
 
     </div>

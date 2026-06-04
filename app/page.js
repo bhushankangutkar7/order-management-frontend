@@ -6,12 +6,11 @@ import HomePage from '../pages/public/Home.jsx';
 
 const App = ({children}) => {
   const pathname = usePathname();
+  const [selectedKey, setSelectedKey] = useState("");
 
   useEffect(() => {
     setSelectedKey(pathname);
   }, [pathname]);
-
-  const [selectedKey, setSelectedKey] = useState("");
 
   return (
     <ContentComponent>
