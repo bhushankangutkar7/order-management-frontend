@@ -29,7 +29,7 @@ const Menu = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6 w-[97%] align-middle mx-auto">
+    <div className="min-h-screen min-w-[300px] bg-gray-100 p-6 w-[97%] align-middle mx-auto rounded-xl">
 
       
       <div className="flex justify-between items-center">
@@ -48,14 +48,14 @@ const Menu = () => {
         )}
       </div>
 
-      <div className="grid md:grid-cols-4 gap-6">
+      <div className="grid xl:grid-cols-5 gap-6 md:grid-cols-3 md:gap-14 sm:grid-cols-2 sm:gap-8">
         {menuItems.map((item) => {
           const cartItem = getItemInCart(item._id);
 
           return (
             <div
               key={item._id}
-              className="bg-white rounded-xl shadow-md overflow-hidden"
+              className="bg-white rounded-xl shadow-md overflow-hidden min-w-[200px]"
             >
               <img
                 src={item.image}

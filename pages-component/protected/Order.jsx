@@ -90,7 +90,7 @@ const Orders = () => {
     : -1;
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="min-h-screen w-full min-w-[300px] bg-gray-100 p-6 rounded-xl">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Order Tracking</h1>
         <div className="flex items-center gap-2">

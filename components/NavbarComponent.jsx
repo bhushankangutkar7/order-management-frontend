@@ -115,7 +115,7 @@ const NavbarComponent = ({ isAuthenticated }) => {
   };
 
   return (
-    <nav className="navbar fixed left-0 w-full bg-gray-800 text-white p-4 flex justify-between items-center min-h-[7.5vh] z-50">
+    <nav className="navbar fixed left-0 w-full min-w-[500px] bg-gray-800 text-white p-4 flex justify-between items-center min-h-[7.5vh] z-50">
       {/* LOGO */}
       <div className="logo opacity-75">
         <Link href="/">Food Express</Link>

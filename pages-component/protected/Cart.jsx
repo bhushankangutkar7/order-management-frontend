@@ -55,7 +55,7 @@ const Cart = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-6 w-full h-auto min-w-[300px]">
       <h1 className="text-3xl font-bold mb-6">Cart</h1>
 
       {cart.length === 0 ? (
@@ -65,7 +65,7 @@ const Cart = () => {
           {cart.map(item => (
             <div
               key={item._id}
-              className="bg-white p-4 shadow rounded mb-4 flex justify-between"
+              className="bg-white p-4 shadow rounded mb-4 flex justify-between min-w-[420px]"
             >
               <div className="flex items-center gap-4">
                 <img
@@ -105,7 +105,7 @@ const Cart = () => {
             </div>
           ))}
 
-          <div className="flex justify-between items-center mt-6 p-4 bg-green-100 rounded text-xl font-bold">
+          <div className="flex justify-between items-center mt-6 p-4 bg-green-100 rounded text-xl font-bold min-w-[420px]">
             <h4>Total Amount: ₹{total}</h4>
             <button
               onClick={() => setShowPaymentModal(true)}
