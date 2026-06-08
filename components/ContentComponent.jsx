@@ -1,15 +1,10 @@
 export default function ContentComponent({children}) {
 
   return (
-    <div style={{ padding: '0 48px', marginTop: '30px'}}>
       <div
-        style={{
-          padding: 24,
-          minHeight: '75vh'
-        }}
+        className='mt-[7.5vh] m-6 p-6 min-h-[85vh] flex justify-center align-center'
       >
         {children}
       </div>
-    </div>
   );
 }

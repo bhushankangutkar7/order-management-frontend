@@ -2,6 +2,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import NavbarComponent from "@/components/NavbarComponent.jsx";
+import ContentComponent from "@/components/ContentComponent.jsx";
 import FooterComponent from "@/components/FooterComponent.jsx";
 import { cookies } from "next/headers";
 import ReduxProvider from "../provider/ReduxProvider";
@@ -33,12 +34,12 @@ export default async function RootLayout({ children }) {
       <body className="min-h-full flex flex-col">
         <ReduxProvider>
           <NavbarComponent isAuthenticated={!!token} />
-          <div className="p-8 min-h-[90vh]">
+          <ContentComponent>
               {children}
-          </div>
+          </ContentComponent>
           <FooterComponent />
         </ReduxProvider>
       </body>
     </html>
   );
-}
+} 

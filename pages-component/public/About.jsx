@@ -1,6 +1,6 @@
 export default function About() {
   return (
-    <div className="max-w-4xl mx-auto my-8 px-4">
+    <div className="max-w-4xl mx-auto my-6 p-6 flex justify-center align-center">
       <div className="bg-white shadow-lg rounded-xl p-6 md:p-10">
 
         {/* Title */}

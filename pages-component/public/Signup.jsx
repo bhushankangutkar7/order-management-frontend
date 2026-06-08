@@ -50,6 +50,7 @@ const Signup = () => {
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfPassword, setShowConfPassword] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e) => {
@@ -126,6 +127,10 @@ const Signup = () => {
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
+  };
+
+  const toggleConfPasswordVisibility = () => {
+    setShowConfPassword((prev) => !prev);
   };
 
   return (
@@ -233,14 +238,28 @@ const Signup = () => {
             <label style={{ display: 'block', marginBottom: 6 }}>
               Confirm Password
             </label>
-            <input
-              name="confirmPassword"
-              type="password"
-              placeholder="Confirm password"
-              className={`w-full p-2 rounded border ${errors.confirmPassword ? `border-red-500`: 'border-gray-300'}`}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
+            <div className="relative">
+              <input
+                name="confirmPassword"
+                type={showConfPassword ? "text":"password"}
+                placeholder="Confirm password"
+                className={`w-full p-2 rounded border ${errors.confirmPassword ? `border-red-500`: 'border-gray-300'}`}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <button
+                type="button"
+                onClick={toggleConfPasswordVisibility}
+                className="absolute inset-y-0 right-0 items-center pr-3 text-gray-400 hover:text-gray-900"
+                aria-label={showConfPassword ? "Hide password" : "Show password"}
+              >
+                {showConfPassword ? (
+                  <EyeOff className="h-5 w-5" aria-hidden="true" />
+                ) : (
+                  <Eye className="h-5 w-5" aria-hidden="true" />
+                )}
+              </button>
+            </div>
             {(touched.confirmPassword || errors.confirmPassword) && (
               <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>
             )}

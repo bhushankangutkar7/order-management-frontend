@@ -13,9 +13,9 @@ const App = ({children}) => {
   }, [pathname]);
 
   return (
-    <ContentComponent>
+    <>
       {(selectedKey === "/home" || selectedKey === "/") && <HomePage />}
-    </ContentComponent>
+    </>
   );
 };
 export default App;
