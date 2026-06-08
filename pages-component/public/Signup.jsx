@@ -3,47 +3,53 @@ import React, { useState } from 'react';
 import * as yup from 'yup';
 import { register } from '../../app/actions/AuthActions.js';
 import { useRouter } from 'next/navigation';
+import { Eye, EyeOff } from "lucide-react";
 
 
 const signupSchema = yup.object({
   firstName: yup
     .string()
     .trim()
+    .required('First name is required') // Keep Duplicate for UX
     .min(3, 'First name must be at least 3 characters')
     .required('First name is required'),
   lastName: yup
     .string()
     .trim()
+    .required('Last name is required') // Keep Duplicate for UX
     .min(3, 'Last name must be at least 3 characters')
     .required('Last name is required'),
   email: yup
     .string()
     .trim()
-    .email('Invalid email')
-    .required('Email is required')
+    .required('Email is required') // Keep Duplicate for UX
     .matches(
       /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
       'Email must include a valid domain extension (e.g. .com, .in)'
-    ),
+    )
+    .required('Email is required'),
   password: yup
     .string()
     .trim()
-    .required('Password is required')
+    .required('Password is required') // Keep Duplicate for UX
     .min(8, 'Password must be at least 8 characters long')
     .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
     .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
     .matches(/[0-9]/, 'Password must contain at least one number')
-    .matches(/[!@#$%^&*(),.?":{}|<>]/, 'Password must contain at least one special character'),
+    .matches(/[!@#$%^&*(),.?":{}|<>]/, 'Password must contain at least one special character')
+    .required('Password is required'),
   confirmPassword: yup
     .string()
     .trim()
+    .required('Confirm password is required') // Keep Duplicate for UX
     .oneOf([yup.ref('password'), null], 'Passwords must match')
     .required('Confirm password is required'),
-  // remember: yup.boolean(),
 });
 
 const Signup = () => {
   const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e) => {
@@ -64,10 +70,10 @@ const Signup = () => {
     try {
       await signupSchema.validate(data, { abortEarly: false });
       
-    } catch (err) {
-      if (err instanceof yup.ValidationError) {
+    } catch (errs) {
+      if (errs instanceof yup.ValidationError) {
         const validationErrors = {};
-        err.inner.forEach((error) => {
+        errs.inner.forEach((error) => {
           validationErrors[error.path] = error.message;
         });
         setErrors(validationErrors);
@@ -104,6 +110,24 @@ const Signup = () => {
     }
   };
 
+  const handleBlur = async(e) => {
+    const { name, value } = e.target;
+
+    setTouched(prev => ({...prev, [name]: true}));
+
+    try {
+      await signupSchema.validateAt(name, { [name]: value });
+    } catch (error) {
+      if ( error instanceof yup.ValidationError) {
+        setErrors(prev => ({...prev, [name]: error.message}));
+      }
+    }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
+
   return (
     <div
       className="flex items-center justify-center min-h-[70vh]"
@@ -125,10 +149,11 @@ const Signup = () => {
               name="firstName"
               type="text"
               placeholder="Enter first name"
-              className="w-100 p-2 rounded border border-gray-300"
+              className={`w-full p-2 rounded border ${errors.firstName ? `border-red-500`: `border-gray-300`}`}
               onChange={handleChange}
+              onBlur={handleBlur}
             />
-            {errors.firstName && (
+            {(touched.firstName || errors.firstName) && (
               <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>
             )}
           </div>
@@ -142,10 +167,11 @@ const Signup = () => {
               name="lastName"
               type="text"
               placeholder="Enter last name"
-              className="w-100 p-2 rounded border border-gray-300"
+              className={`w-full p-2 rounded border ${errors.lastName ? `border-red-500`: `border-gray-300`}`}
               onChange={handleChange}
+              onBlur={handleBlur}
             />
-            {errors.lastName && (
+            {(touched.lastName || errors.lastName) && (
               <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>
             )}
           </div>
@@ -159,9 +185,11 @@ const Signup = () => {
               name="email"
               type="email"
               placeholder="Enter email"
-              className="w-100 p-2 rounded border border-gray-300"
+              className={`w-full p-2 rounded border ${errors.email ? `border-red-500`: `border-gray-300`}`}
+              onChange={handleChange}
+              onBlur={handleBlur}
             />
-            {errors.email && (
+            {(touched.email || errors.email) && (
               <p className="text-red-500 text-sm mt-1">{errors.email}</p>
             )}
           </div>
@@ -171,13 +199,31 @@ const Signup = () => {
             <label style={{ display: 'block', marginBottom: 6 }}>
               Password
             </label>
-            <input
-              name="password"
-              type="password"
-              placeholder="Enter password"
-              className="w-100 p-2 rounded border border-gray-300"
-            />
-            {errors.password && (
+            <div className="relative">
+              <input
+                name="password"
+                type={showPassword ? `text` : `password`}
+                placeholder="Enter password"
+                className={`w-full p-2 rounded border ${errors.password ? `border-red-500`: `border-gray-300`}`}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute inset-y-0 right-0 items-center pr-3 text-gray-400 hover:text-gray-900"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? (
+                  <EyeOff className="h-5 w-5" aria-hidden="true" />
+                ) : (
+                  <Eye className="h-5 w-5" aria-hidden="true" />
+                )}
+              </button>
+            </div>
+
+            {(touched.password || errors.password) && (
               <p className="text-red-500 text-sm mt-1">{errors.password}</p>
             )}
           </div>
@@ -191,26 +237,14 @@ const Signup = () => {
               name="confirmPassword"
               type="password"
               placeholder="Confirm password"
-              className="w-100 p-2 rounded border border-gray-300"
+              className={`w-full p-2 rounded border ${errors.confirmPassword ? `border-red-500`: 'border-gray-300'}`}
+              onChange={handleChange}
+              onBlur={handleBlur}
             />
-            {errors.confirmPassword && (
+            {(touched.confirmPassword || errors.confirmPassword) && (
               <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>
             )}
           </div>
-
-          {/* Remember Me */}
-          {/* <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              marginBottom: 20,
-            }}
-          >
-            <input type="checkbox" name="remember" id="remember" />
-            <label htmlFor="remember" style={{ marginLeft: 8 }}>
-              Remember me
-            </label>
-          </div> */}
 
           {/* Button */}
           <button

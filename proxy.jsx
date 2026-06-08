@@ -33,7 +33,7 @@ export default async function proxy(request) {
         }
       );  
     } catch (err) {
-      console.log("JWT error:", err.message);
+      console.error("JWT error:", err.message);
       user = null;
     }
   }
