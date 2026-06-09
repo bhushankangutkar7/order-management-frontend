@@ -14,6 +14,7 @@ const statuses = [
 const Orders = () => {
   const [ordersStatus, setOrdersStatus] = useState([]);
   const [activeOrder, setActiveOrder] = useState(null);
+  const [pastOrders, setPastOrders] = useState([]);
   const {orderStatusSocket, isConnectedSocket, latestUpdateSocket } = useOrderSocket(
     activeOrder?._id
   );
@@ -25,6 +26,12 @@ const Orders = () => {
         const orders = await getAllOrders();
         if (orders && Array.isArray(orders)) {
           setOrdersStatus(orders);
+
+          const orderedPastOrders = orders
+            .filter((order) => order.status === "Delivered")
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+          setPastOrders(()=>orderedPastOrders)
           
           // Set the active order (first non-delivered order)
           const active = orders.find(
@@ -65,7 +72,23 @@ const Orders = () => {
   useEffect(() => {
     if (activeOrder?.status === "Delivered") {
       console.log("✅ Order delivered, finding next active order");
+
+      const deliveredOrder = {
+        _id: activeOrder._id,
+        customer: activeOrder.customer,
+        items: activeOrder.items,
+        totalAmount: activeOrder.totalAmount,
+        status: activeOrder.status,
+        createdAt: activeOrder.createdAt,
+        updatedAt: activeOrder.updatedAt
+      }
       
+      const sortedOrders = [...pastOrders];
+
+      sortedOrders.unshift(deliveredOrder);
+
+      setPastOrders(() => sortedOrders);
+
       // Find next active (non-delivered) order from ordersStatus
       const nextActive = ordersStatus.find(
         (order) => order.status !== "Delivered" && order._id !== activeOrder._id
@@ -80,10 +103,6 @@ const Orders = () => {
       }
     }
   }, [activeOrder?.status]);
-
-  const pastOrders = ordersStatus
-    .filter((order) => order.status === "Delivered")
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   const currentStatusIndex = activeOrder
     ? statuses.indexOf(activeOrder.status)
@@ -171,11 +190,11 @@ const Orders = () => {
         </div>
       )}
 
-      {pastOrders.length > 0 && (
+      {pastOrders?.length > 0 && (
         <div className="bg-white rounded-xl shadow p-6 mt-12">
           <h2 className="font-bold text-xl mb-4">Past Orders</h2>
           <div className="space-y-4">
-            {pastOrders.map((order) => (
+            {pastOrders?.map((order) => (
               <div
                 key={order._id}
                 className="border-b pb-4 last:border-b-0"

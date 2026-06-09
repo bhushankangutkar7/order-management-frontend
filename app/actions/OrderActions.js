@@ -18,17 +18,10 @@ export async function createOrder(data) {
       quantity: item.quantity,
     }));
 
-    const totalAmount = updatedData.reduce(
-      (total, item) =>
-        total + item.price * item.quantity,
-      0
-    );
-
     const response = await axios.post(
       `${process.env.BACKEND_NODE_URL}/api/v1/orders`,
       {
         items: updatedData,
-        totalAmount,
         status: "Order Received",
       },
       {
@@ -39,7 +32,7 @@ export async function createOrder(data) {
       }
     );
 
-    return response.data;
+    return response.data.data;
 
   } catch (error) {
     console.error(
