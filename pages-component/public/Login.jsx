@@ -3,6 +3,7 @@ import * as yup from 'yup';
 import { login } from '../../app/actions/AuthActions.js';
 import { useRouter } from 'next/navigation';
 import { Eye, EyeOff } from "lucide-react";
+import Link from "next/link";
 
 // 1. Define the validation schema
 const loginSchema = yup.object({
@@ -183,10 +184,13 @@ const Login = () => {
           {/* Button */}
           <button
             type="submit"
-            className="w-full p-3 text-white rounded-lg bg-blue-500 hover:bg-blue-800 transition-colors"
+            className="w-full p-3 text-white rounded-xl bg-blue-500 hover:bg-blue-800 transition-colors"
           >
             Login
           </button>
+          <div className="mt-2 ms-1">
+            <p>Don't have an Account? <Link href="/signup" className="text-blue-700">Click Here</Link></p>
+          </div>
         </form>
       </div>
     </div>

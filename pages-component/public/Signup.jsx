@@ -4,6 +4,7 @@ import * as yup from 'yup';
 import { register } from '../../app/actions/AuthActions.js';
 import { useRouter } from 'next/navigation';
 import { Eye, EyeOff } from "lucide-react";
+import Link from "next/link";
 
 
 const signupSchema = yup.object({
@@ -272,6 +273,9 @@ const Signup = () => {
           >
             Sign Up
           </button>
+          <div className="mt-2 ms-1">
+            <p>Already have an Account? <Link href="login" className="text-blue-700">Click Here</Link></p>
+          </div>          
         </form>
       </div>
     </div>
