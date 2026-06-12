@@ -2,10 +2,10 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="px-4 py-10">
+    <div className="min-h-screen px-2 py-6 mt-10 min-w-[350px]">
 
       {/* Hero Section */}
-      <div className="text-center py-16 px-6 bg-gray-100 rounded-xl mb-10">
+      <div className="text-center py-16 px-6 border border-gray-200 bg-gray-100 shadow-xl rounded-xl mb-10">
         <h1 className="text-4xl font-bold mb-4">
           🍕 Welcome to Food Express
         </h1>

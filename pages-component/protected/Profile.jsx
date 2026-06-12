@@ -10,7 +10,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6 w-full min-w-[400px]">
+    <div className="bg-gray-100 p-6 w-full min-w-[325px] mt-10">
       <h1 className="text-3xl font-bold mb-8">
         My Profile
       </h1>

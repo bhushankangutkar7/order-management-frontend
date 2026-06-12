@@ -29,7 +29,7 @@ const Menu = () => {
   }, []);
 
   return (
-    <div className="min-h-screen min-w-[300px] bg-gray-100 p-6 w-[97%] align-middle mx-auto rounded-xl">
+    <div className="min-h-screen min-w-[300px] bg-gray-100 p-6 mt-10 w-[97%] align-middle mx-auto rounded-xl">
 
       
       <div className="flex justify-between items-center">

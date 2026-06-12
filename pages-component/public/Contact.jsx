@@ -1,7 +1,7 @@
 export default function Contact() {
   return (
-    <div className="max-w-4xl mx-auto my-6 p-6 flex justify-center align-center">
-      <div className="bg-white shadow-lg rounded-xl p-6 md:p-10">
+    <div className="max-w-4xl mx-auto mt-10 p-2 flex justify-center align-center min-w-[350px]">
+      <div className="bg-white shadow-lg border border-gray-300 rounded-xl p-6 md:p-10">
 
         {/* Title */}
         <h1 className="text-3xl font-bold text-center mb-6">

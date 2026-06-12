@@ -121,7 +121,7 @@ const Login = () => {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-[70vh]">
+    <div className="flex items-center justify-center min-w-[300px]">
       <div className="w-[450px] p-6 bg-white rounded-lg shadow-lg">
         <h2 className="text-center mb-6 font-bold text-2xl">Login</h2>
 
